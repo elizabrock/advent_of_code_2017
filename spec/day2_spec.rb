@@ -1,6 +1,6 @@
 require_relative 'spec_helper'
 
-# http://adventofcode.com/2017/day/1
+# http://adventofcode.com/2017/day/2
 
 describe Day2 do
   describe "part1" do
