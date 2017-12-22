@@ -1,5 +1,5 @@
 class Day1
-  def self.run(input)
+  def self.part1(input)
     input = input.split(//).map(&:to_i)
     pairs = input.zip(input.rotate)
     output = pairs.inject(0) do |sum, pair|
