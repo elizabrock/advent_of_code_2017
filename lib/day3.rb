@@ -4,74 +4,79 @@ class Day3
   S = [0, -1]
   E = [1, 0]
 
+  attr_reader :coordinates
+  attr_accessor :direction
+
   def self.part1(input)
-    manhattan_distance(spiral_coordinates(input.to_i))
+    day3 = Day3.new(0,0)
+    # Since we start at 1, only move n - 1 times
+    moves = input.to_i - 1
+    day3.spiral(moves)
+    day3.manhattan_distance
+    # manhattan_distance(spiral_coordinates(input.to_i))
   end
 
-  def self.manhattan_distance(coordinates)
+  def initialize(x, y)
+    @coordinates = [x, y]
+    @ne_corner = [0, 0]
+    @nw_corner = [0, 0]
+    @sw_corner = [0, 0]
+    @se_corner = [0, 1]
+    @direction = E
+  end
+
+  def manhattan_distance
     coordinates[0].abs + coordinates[1].abs
   end
 
-  def self.spiral_coordinates(n)
-    current_coordinates = [0, 0]
-    ne_corner = [0, 0]
-    nw_corner = [0, 0]
-    sw_corner = [0, 0]
-    se_corner = [0, 1]
-    direction = E
+  def spiral(n)
     # for each step, continue heading in <direction>
     # until we are farther in <direction> than the nearest corner
     # then, turn
-    (n-1).times do
-      current_coordinates = move(direction, current_coordinates)
-      if turning_corner?(current_coordinates, direction, ne_corner, nw_corner, sw_corner, se_corner)
-        update_corner(current_coordinates, direction, ne_corner, nw_corner, sw_corner, se_corner)
-        direction = next_direction(direction)
-      end
+    n.times do
+      move!
     end
-    current_coordinates
   end
 
-  def self.move(direction, coordinates)
-    [direction[0] + coordinates[0], direction[1] + coordinates[1]]
+  def move!
+    @coordinates = [coordinates[0] + direction[0], coordinates[1] + direction[1]]
+    turn! if turning_corner?
   end
 
-  def self.turning_corner?(coordinates, direction, ne_corner, nw_corner, sw_corner, se_corner)
+  def turning_corner?
+    next_corner_at = [nil, nil]
     case direction
     when N
-      next_corner = nw_corner
-      directions = [N, W]
+      next_corner_at[0] = @ne_corner[0] + N[0] + E[0]
+      next_corner_at[1] = @ne_corner[1] + N[1] + E[1]
     when W
-      next_corner = sw_corner
-      directions = [S, W]
+      next_corner_at[0] = @nw_corner[0] + N[0] + W[0]
+      next_corner_at[1] = @nw_corner[1] + N[1] + W[1]
     when S
-      next_corner = se_corner
-      directions = [S, E]
+      next_corner_at[0] = @sw_corner[0] + S[0] + W[0]
+      next_corner_at[1] = @sw_corner[1] + S[1] + W[1]
     when E
-      next_corner = ne_corner
-      directions = [N, E]
+      next_corner_at[0] = @se_corner[0] + S[0] + E[0]
+      next_corner_at[1] = @se_corner[1] + S[1] + E[1]
     end
-    # calculate coordinates diagonal of corner
-    corner_coordinates = move(move(next_corner, directions[0]), directions[1])
-    coordinates == corner_coordinates
+    @coordinates == next_corner_at
   end
 
-  def self.update_corner(coordinates, direction, ne_corner, nw_corner, sw_corner, se_corner)
-    corner = case direction
+  def turn!
+    case @direction
     when N
-      nw_corner
+      @ne_corner = coordinates.clone
     when W
-      sw_corner
+      @nw_corner = coordinates.clone
     when S
-      se_corner
+      @sw_corner = coordinates.clone
     when E
-      ne_corner
+      @se_corner = coordinates.clone
     end
-    corner[0] = coordinates[0]
-    corner[1] = coordinates[1]
+    @direction = next_direction(direction)
   end
 
-  def self.next_direction(direction)
+  def next_direction(direction)
     case direction
     when N
       W
