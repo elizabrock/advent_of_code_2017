@@ -19,8 +19,13 @@ class AdventOfCode
     class_filename = File.join("lib", "day#{day}.rb")
     require_relative class_filename
     klass = Object.const_get("Day#{day}")
+    method = "part#{part}"
     puts "= Day #{day}, Part #{part}:"
-    puts klass.send("part#{part}", input)
+    if klass.respond_to? method
+      puts klass.send(method, input)
+    else
+      puts "Not yet implemented"
+    end
   end
 end
 
