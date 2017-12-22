@@ -11,6 +11,7 @@ describe Day2 do
       actual.must_equal(expected)
     end
   end
+
   describe "row_checksum" do
     it "scenario 1" do
       input = [5, 1, 9, 5]
@@ -28,6 +29,36 @@ describe Day2 do
       input = [2, 4, 6, 8]
       expected = 6
       actual = Day2.row_checksum(input)
+      actual.must_equal(expected)
+    end
+  end
+
+  describe "part2" do
+    it "scenario 1" do
+      input = "5\t9\t2\t8\n9\t4\t7\t3\n3\t8\t6\t5"
+      expected = 9
+      actual = Day2.part2(input)
+      actual.must_equal(expected)
+    end
+  end
+
+  describe "row_divisibility" do
+    it "scenario 1" do
+      input = [5, 9, 2, 8]
+      expected = 4
+      actual = Day2.row_division(input)
+      actual.must_equal(expected)
+    end
+    it "scenario 2" do
+      input = [9, 4, 7, 3]
+      expected = 3
+      actual = Day2.row_division(input)
+      actual.must_equal(expected)
+    end
+    it "scenario 3" do
+      input = [3, 8, 6, 5]
+      expected = 2
+      actual = Day2.row_division(input)
       actual.must_equal(expected)
     end
   end
