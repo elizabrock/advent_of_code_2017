@@ -13,16 +13,30 @@ class Day3
     moves = input.to_i - 1
     day3.spiral(moves)
     day3.manhattan_distance
-    # manhattan_distance(spiral_coordinates(input.to_i))
   end
 
-  def initialize(x, y)
+  def self.part2(input)
+    goal = input.to_i
+    day3 = Day3.new(0,0)
+    while day3.current_value <= goal
+      day3.move!
+    end
+    day3.current_value
+  end
+
+  def initialize(x = 0, y = 0)
+    @cells = Hash.new{ |hash, key| hash[key] = Hash.new(0) }
+    @cells[0][0] = 1
     @coordinates = [x, y]
     @ne_corner = [0, 0]
     @nw_corner = [0, 0]
     @sw_corner = [0, 0]
     @se_corner = [0, 1]
     @direction = E
+  end
+
+  def current_value
+    @cells[@coordinates[0]][@coordinates[1]]
   end
 
   def manhattan_distance
@@ -39,7 +53,10 @@ class Day3
   end
 
   def move!
-    @coordinates = [coordinates[0] + direction[0], coordinates[1] + direction[1]]
+    x = coordinates[0] + direction[0]
+    y = coordinates[1] + direction[1]
+    @coordinates = [x, y]
+    @cells[x][y] = adjacent_values.inject{ |sum, val| sum + val }
     turn! if turning_corner?
   end
 
@@ -74,6 +91,15 @@ class Day3
       @se_corner = coordinates.clone
     end
     @direction = next_direction(direction)
+  end
+
+  def adjacent_values
+    x = @coordinates[0]
+    y = @coordinates[1]
+    x_vals = (x - 1)..(x + 1)
+    y_vals = (y - 1)..(y + 1)
+    cells = x_vals.to_a.product(y_vals.to_a)
+    cells.map{ |pair| @cells[pair[0]][pair[1]] }
   end
 
   def next_direction(direction)

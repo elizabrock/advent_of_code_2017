@@ -130,4 +130,68 @@ describe Day3 do
       actual.must_equal(expected)
     end
   end
+  describe "part2" do
+    it "scenario 1" do
+      input = "1"
+      expected = 2
+      actual = Day3.part2(input)
+      actual.must_equal(expected)
+    end
+    it "scenario 12" do
+      input = "12"
+      expected = 23
+      actual = Day3.part2(input)
+      actual.must_equal(expected)
+    end
+    it "scenario 23" do
+      input = "23"
+      expected = 25
+      actual = Day3.part2(input)
+      actual.must_equal(expected)
+    end
+    it "scenario 1024" do
+      input = "747"
+      expected = 806
+      actual = Day3.part2(input)
+      actual.must_equal(expected)
+    end
+  end
+  describe "current_value" do
+    it "square 1" do
+      actual = value_of_square(1)
+      expected = 1
+      actual.must_equal expected
+    end
+    it "square 2" do
+      actual = value_of_square(2)
+      expected = 1
+      actual.must_equal expected
+    end
+    it "square 3" do
+      actual = value_of_square(3)
+      expected = 2
+      actual.must_equal expected
+    end
+    it "square 4" do
+      actual = value_of_square(4)
+      expected = 4
+      actual.must_equal expected
+    end
+    it "square 5" do
+      actual = value_of_square(5)
+      expected = 5
+      actual.must_equal expected
+    end
+    it "scenario 20" do
+      actual = value_of_square(20)
+      expected = 351
+      actual.must_equal expected
+    end
+  end
+
+  def value_of_square(n)
+    day = Day3.new
+    day.spiral(n - 1)
+    day.current_value
+  end
 end
