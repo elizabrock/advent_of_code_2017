@@ -44,4 +44,36 @@ EOS
       actual.must_equal(expected)
     end
   end
+  describe "valid_unanagramable_passphrase?" do
+    it "scenario 1" do
+      input = "abcde fghij"
+      expected = true
+      actual = Day4.valid_unanagramable_passphrase?(input)
+      actual.must_equal(expected)
+    end
+    it "scenario 2" do
+      input = "abcde xyz ecdab"
+      expected = false
+      actual = Day4.valid_unanagramable_passphrase?(input)
+      actual.must_equal(expected)
+    end
+    it "scenario 1" do
+      input = "a ab abc abd abf abj"
+      expected = true
+      actual = Day4.valid_unanagramable_passphrase?(input)
+      actual.must_equal(expected)
+    end
+    it "scenario 4" do
+      input = "iiii oiii ooii oooi oooo "
+      expected = true
+      actual = Day4.valid_unanagramable_passphrase?(input)
+      actual.must_equal(expected)
+    end
+    it "scenario 5" do
+      input = "oiii ioii iioi iiio "
+      expected = false
+      actual = Day4.valid_unanagramable_passphrase?(input)
+      actual.must_equal(expected)
+    end
+  end
 end
