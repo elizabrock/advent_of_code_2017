@@ -11,6 +11,14 @@ describe Day6 do
       actual.must_equal(expected)
     end
   end
+  describe "part2" do
+    it "scenario 1" do
+      input = "0\t2\t7\t0"
+      expected = 4
+      actual = Day6.part2(input)
+      actual.must_equal(expected)
+    end
+  end
   describe "redistribute" do
     it "should redistribute according to the rules" do
       input = [0, 2, 7, 0]
