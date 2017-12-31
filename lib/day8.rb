@@ -4,14 +4,32 @@ class Day8
     input.strip.split(/\n/).each do |instruction|
       registers.execute_instruction(instruction)
     end
-    registers.current_state.values.max
+    registers.pretty_state.values.max
+  end
+
+  def self.part2(input)
+    registers = Registers.new()
+    input.strip.split(/\n/).each do |instruction|
+      registers.execute_instruction(instruction)
+    end
+    registers.current_state.map{ |pair| pair[1].max_value }.max
   end
 
   class Registers
     attr_reader :current_state
 
     def initialize
-      @current_state = Hash.new(0)
+      @current_state = Hash.new{ |hash, key| hash[key] = Register.new(0) }
+    end
+
+    def pretty_state
+      pretty_state = Hash.new
+      @current_state.each_pair do |key, register|
+        if register.value != 0
+          pretty_state[key] = register.value
+        end
+      end
+      pretty_state
     end
 
     def execute_instruction(instruction)
@@ -25,7 +43,7 @@ class Day8
         value = value * -1
       end
       if evaluate_conditional(conditional)
-        @current_state[register] += value
+        @current_state[register].increment value
       end
     end
 
@@ -35,6 +53,30 @@ class Day8
       register_value = @current_state[register]
       comparison_value = value.to_i
       register_value.send(operator, comparison_value)
+    end
+  end
+
+  class Register
+    include Comparable
+    attr_reader :value, :max_value
+    def initialize(initial_value)
+      @value = initial_value
+      @max_value = initial_value
+    end
+
+    def increment(value)
+      @value += value
+      if @value > @max_value
+        @max_value = @value
+      end
+    end
+
+    def <=>(other)
+      if other.is_a? Register
+        self.value <=> other.value
+      else
+        self.value <=> other
+      end
     end
   end
 end
