@@ -45,6 +45,48 @@ describe Day9 do
       actual.must_equal(expected)
     end
   end
+  describe "part2" do
+    it "scenario 1" do
+      expected = 0
+      actual = Day9.part2("{}")
+      actual.must_equal(expected)
+    end
+    it "scenario 2" do
+      expected = 0
+      actual = Day9.part2("{<>}")
+      actual.must_equal(expected)
+    end
+    it "scenario 3" do
+      expected = 17
+      actual = Day9.part2("{<random characters>}")
+      actual.must_equal(expected)
+    end
+    it "scenario 4" do
+      expected = 3
+      actual = Day9.part2("{<<<<>}")
+      actual.must_equal(expected)
+    end
+    it "scenario 5" do
+      expected = 4
+      actual = Day9.part2("{<a>,<a>,<a>,<a>}")
+      actual.must_equal(expected)
+    end
+    it "scenario 6" do
+      expected = 2
+      actual = Day9.part2("{<{!>}>}")
+      actual.must_equal(expected)
+    end
+    it "scenario 7" do
+      expected = 0
+      actual = Day9.part2("{<!!>}")
+      actual.must_equal(expected)
+    end
+    it "scenario 8" do
+      expected = 10
+      actual = Day9.part2("{<{o\"i!a,<{i<a>}")
+      actual.must_equal(expected)
+    end
+  end
 end
 
 describe Day9::CharacterGroup do

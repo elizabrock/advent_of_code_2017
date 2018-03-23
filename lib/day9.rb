@@ -4,6 +4,11 @@ class Day9
     group.total_score
   end
 
+  def self.part2(input)
+    group = CharacterGroup.parse(input)
+    group.garbage_character_count
+  end
+
   class CharacterGroup
     attr_reader :groups, :parent
 
@@ -26,6 +31,10 @@ class Day9
 
     def add_child(klass: CharacterGroup, input: nil)
       self.groups << klass.new(parent: self, input: input)
+    end
+
+    def garbage_character_count
+      groups.inject(0){|sum, group| sum + group.garbage_character_count }
     end
 
     def size
@@ -75,7 +84,7 @@ class Day9
       when "<"
         Garbage
       else
-        nil
+        Text
       end
     end
   end
@@ -105,7 +114,27 @@ class Day9
     end
 
     def group_started_by(char)
-      nil
+      Text
+    end
+  end
+
+  class Text < CharacterGroup
+    def garbage_character_count
+      self.parent.kind_of?(Garbage) ? 1 : 0
+    end
+
+    def score
+      0
+    end
+
+    def size
+      0
+    end
+
+    private
+
+    def parse(input)
+      return
     end
   end
 end
