@@ -67,9 +67,7 @@ class Day9
           return
         end
         next_class = group_started_by(next_char)
-        unless next_class.nil?
-          self.add_child(klass: next_class, input: input)
-        end
+        self.add_child(klass: next_class, input: input)
       end
     end
 
