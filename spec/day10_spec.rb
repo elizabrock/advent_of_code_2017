@@ -3,6 +3,14 @@ require_relative 'spec_helper'
 # http://adventofcode.com/2017/day/10
 
 describe Day10 do
+  describe "process_input" do
+    it "converts to ASCII code and appends additional instructions of 17, 31, 73, 47, 23" do
+      input = "1,2,3"
+      actual = Day10.process_input(input)
+      expected = [49, 44, 50, 44, 51, 17, 31, 73, 47, 23]
+      actual.must_equal expected
+    end
+  end
   describe Day10::CircularArray do
     describe "slice" do
       it "works with a regular index" do

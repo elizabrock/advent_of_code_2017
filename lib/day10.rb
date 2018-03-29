@@ -7,6 +7,22 @@ class Day10
     knot.checksum
   end
 
+  def self.part2(input)
+    knot = Knot.new(256)
+    input = process_input(input)
+    64.times do |i|
+      input.each do |length|
+        knot.twist(length)
+      end
+    end
+    knot.to_dense_hash
+  end
+
+  def self.process_input(input)
+    input = input.split("").map(&:ord)
+    input + [17, 31, 73, 47, 23]
+  end
+
   class CircularArray
     def initialize(initial_array)
       @array = initial_array
@@ -51,6 +67,19 @@ class Day10
     def checksum
       # the result of multiplying the first two numbers in the list
       @string[0] * @string[1]
+    end
+
+    def to_dense_hash
+      # Once the rounds are complete, you will be left with the numbers
+      # from 0 to 255 in some order, called the sparse hash
+      # reduce these to a list of only 16 numbers called the dense hash
+      dense_hash = []
+      @string.each_slice(16) do |group|
+        dense_group = group.inject(0){ |memo, item| memo ^ item }
+        # Convert to 2-digit hexadecimal:
+        dense_hash << "%02X" % dense_group
+      end
+      dense_hash.join
     end
 
     def twist(length)
