@@ -3,75 +3,49 @@ class Day11
     moves = input.split(",")
     hex = Hex.new()
     hex.move(*moves)
-    old_moves = []
-    moves = hex.moves
-    until old_moves.count == moves.count
-      old_moves = moves
-      hex = Hex.new()
-      hex.move(*moves)
-      moves = hex.moves
-    end
     hex.steps_away_from_center
   end
 
   class Hex
-    attr_accessor :moves
+    attr_accessor :x, :y
+
     def initialize()
-      @moves = []
+      @x = 0
+      @y = 0
     end
 
     def move(*moves)
-      moves.each do |direction|
-        if can_cancel_out?(direction)
-          cancel_out!(direction)
-        else
-          @moves << direction
-        end
+      moves.each{ |move| move_once(move) }
+    end
+
+    # NW|N |
+    # --+--+--
+    # SW|  |NE
+    # --+--+--
+    #   |S |SE
+
+    def move_once(move)
+      case move
+      when "nw"
+        @x -= 1
+        @y += 1
+      when "sw"
+        @x -= 1
+      when "s"
+        @y -= 1
+      when "se"
+        @y -= 1
+        @x += 1
+      when "ne"
+        @x += 1
+      when "n"
+        @y += 1
       end
     end
 
     def steps_away_from_center
-      @moves.count
-    end
-
-    private
-
-    CANCELLATIONS = { "ne" => "sw",
-                      "nw" => "se",
-                      "se" => "nw",
-                      "sw" => "ne",
-                      "n"  => "s",
-                      "s"  => "n" }
-    SPECIAL_CANCELLATIONS = { "s" => "n",
-                              "n" => "s" }
-    STRIP_CANCELLATIONS = { "se" => ["sw", "w"],
-                            "sw" => ["se", "e"],
-                            "ne" => ["nw", "w"],
-                            "nw" => ["ne", "e"] }
-
-    def can_cancel_out?(direction)
-      canceller = CANCELLATIONS[direction]
-      return true if @moves.any?{ |move| move == canceller }
-      cancelable_character = SPECIAL_CANCELLATIONS[direction]
-      return true if (!cancelable_character.nil? and @moves.any?{ |move| move.include? cancelable_character })
-      matchee, stripped_char = STRIP_CANCELLATIONS[direction]
-      return true if !matchee.nil? and @moves.any?{ |move| move == matchee }
-    end
-
-    def cancel_out!(direction)
-      canceller = CANCELLATIONS[direction]
-      if index = @moves.index(canceller)
-        @moves.delete_at(index)
-      elsif cancelable_character = SPECIAL_CANCELLATIONS[direction]
-        move = @moves.detect{ |move| move.include? cancelable_character }
-        move.delete!(cancelable_character)
-      elsif STRIP_CANCELLATIONS[direction]
-        cancelable_character, stripped_char = STRIP_CANCELLATIONS[direction]
-        move = @moves.detect{ |move| move.include? cancelable_character }
-        move.delete!(stripped_char)
-      else
-        puts "I don't know how we got here"
-      end
+      # https://www.redblobgames.com/grids/hexagons/#distances-cube
+      (@x.abs + @y.abs + (@x + @y).abs) / 2
     end
   end
 end

@@ -12,7 +12,7 @@ describe Day11 do
     it "scenario 1" do
       hex = Day11::Hex.new
       hex.move("ne", "ne", "ne")
-      hex.moves.must_equal(["ne", "ne", "ne"])
+      #hex.moves.must_equal(["ne", "ne", "ne"])
       hex.steps_away_from_center.must_equal 3
     end
     it "scenario 2" do
@@ -30,7 +30,7 @@ describe Day11 do
     it "scenario 4" do
       hex = Day11::Hex.new
       hex.move("se", "sw", "se", "sw", "sw")
-      hex.moves.must_equal(["s", "s", "sw"])
+      #hex.moves.must_equal(["s", "s", "sw"])
       hex.steps_away_from_center.must_equal 3
     end
     it "scenario 5" do
