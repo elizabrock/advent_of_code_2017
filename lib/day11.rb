@@ -2,8 +2,23 @@ class Day11
   def self.part1(input)
     moves = input.split(",")
     hex = Hex.new()
-    hex.move(*moves)
+    moves.each do |move|
+      hex.move(move)
+    end
     hex.steps_away_from_center
+  end
+
+  def self.part2(input)
+    moves = input.split(",")
+    hex = Hex.new()
+    max_distance = 0
+    moves.each do |move|
+      hex.move(move)
+      if hex.steps_away_from_center > max_distance
+        max_distance = hex.steps_away_from_center
+      end
+    end
+    max_distance
   end
 
   class Hex
@@ -14,8 +29,8 @@ class Day11
       @y = 0
     end
 
-    def move(*moves)
-      moves.each{ |move| move_once(move) }
+    def move_many(*moves)
+      moves.each{ |move| move(move) }
     end
 
     # NW|N |
@@ -24,7 +39,7 @@ class Day11
     # --+--+--
     #   |S |SE
 
-    def move_once(move)
+    def move(move)
       case move
       when "nw"
         @x -= 1
