@@ -4,6 +4,11 @@ class Day12
     village.in_communication_with(0).count
   end
 
+  def self.part2(input)
+    village = Village.new(input)
+    village.number_of_groups
+  end
+
   class Village
     attr_reader :villagers
     def initialize(input)
@@ -23,6 +28,18 @@ class Day12
       villager = @villagers[recipient]
       villager.initiate_phone_tree!
       @villagers.find_all{ |villager| villager.was_called_by?(recipient) }
+    end
+
+    def number_of_groups
+      as_yet_orphaned = @villagers.clone
+      groups = 0
+      until as_yet_orphaned.empty?
+        groups += 1
+        leader = as_yet_orphaned.first
+        leader.initiate_phone_tree!
+        as_yet_orphaned = as_yet_orphaned.reject{ |villager| villager.was_called_by?(leader.name) }
+      end
+      groups
     end
   end
 

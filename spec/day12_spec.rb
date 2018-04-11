@@ -28,9 +28,9 @@ describe Day12 do
         village.villagers.count.must_equal 7
       end
     end
-    describe "find" do
-      it "finds the villager" do
-
+    describe "groups" do
+      it "counts them" do
+        village.number_of_groups.must_equal 2
       end
     end
   end
