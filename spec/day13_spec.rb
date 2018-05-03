@@ -18,6 +18,12 @@ describe Day13 do
     end
   end
 
+  describe "#part2" do
+    it "parses the input properly" do
+      Day13.part2(input2).must_equal 10
+    end
+  end
+
   describe "Firewall" do
     let(:input){
       { 0 => 3, 1 => 2, 4 => 4, 6 => 4 }
@@ -26,6 +32,21 @@ describe Day13 do
 
     it "layout" do
       firewall.layout.must_equal [3, 2, 0, 0, 4, 0, 4]
+    end
+
+    it "delay" do
+      10.times { firewall.delay! }
+      firewall.scanner_locations.must_equal [2, 0, nil, nil, 2, nil, 2]
+    end
+
+    it "traverses firewall correctly after delay" do
+      10.times { firewall.delay! }
+      firewall.traverse_firewall!
+      firewall.trip_cost.must_equal 0
+    end
+
+    it "ideal_delay_for" do
+      Day13::Firewall.ideal_delay_for(input).must_equal 10
     end
 
     it "scanner_locations" do

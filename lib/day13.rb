@@ -1,13 +1,21 @@
 class Day13
   def self.part1(input)
+    firewall = Firewall.new(parse_input(input))
+    firewall.traverse_firewall!
+    firewall.trip_cost
+  end
+
+  def self.part2(input)
+    Firewall.ideal_delay_for(parse_input(input))
+  end
+
+  def self.parse_input(input)
     input_hash = {}
     input.split("\n").map do |line|
       key, value = line.split(": ").map(&:to_i)
       input_hash[key] = value
     end
-    firewall = Firewall.new(input_hash)
-    firewall.traverse_firewall!
-    firewall.trip_cost
+    input_hash
   end
 
   class Firewall
@@ -25,16 +33,37 @@ class Day13
       @trip_cost = 0
     end
 
-    def traverse_firewall!
-      @layout.length.times do
-        tick!
+    def self.ideal_delay_for(input)
+      delay = -1
+      cost = 1
+      loop do
+        delay += 1
+        firewall = Firewall.new(input)
+        delay.times{ firewall.delay! }
+        firewall.traverse_firewall!
+        break unless firewall.got_caught?
       end
+      delay
+    end
+
+    def got_caught?
+      @got_caught
+    end
+
+    def delay!
+      move_scanners!
     end
 
     def tick!
       move_self!
       scan!
       move_scanners!
+    end
+
+    def traverse_firewall!
+      @layout.length.times do
+        tick!
+      end
     end
 
     private
@@ -47,6 +76,7 @@ class Day13
       depth = @my_location
       if @scanner_locations[depth] == 0
         range = @layout[depth]
+        @got_caught = true
         @trip_cost += depth * range
       end
     end
